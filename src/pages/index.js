@@ -1,22 +1,15 @@
 import React from "react"
-import { Link } from "gatsby"
+import { CO2BarChart } from "../components/co2-bar-chart"
+import useCo2Emissions from "../hooks/use-co2-emissions"
+import "./index.css"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+export default () => {
+  const co2emissions = useCo2Emissions()
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
+  return (
+    <div className="app-header">
+      <div>Visualizations</div>
+      <CO2BarChart emissionData={co2emissions} />
     </div>
-    <Link to="/page-2/">Go to page 2</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-  </Layout>
-)
-
-export default IndexPage
+  )
+}
