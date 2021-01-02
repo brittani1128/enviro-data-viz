@@ -14,7 +14,6 @@ export const useGasEmissions = () => {
       }
     }
   `)
-  console.log(data.allGreenhouseGasEmissionsCsv.nodes)
   return data.allGreenhouseGasEmissionsCsv.nodes
 }
 
