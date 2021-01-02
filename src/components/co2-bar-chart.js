@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react"
 import * as d3 from "d3"
 import "./styles.css"
 
-export const CO2BarChart = ({ emissionData }) => {
+const CO2BarChart = ({ emissionData }) => {
   const d3Container = useRef(null)
   const w = 900
   const h = 600
@@ -126,3 +126,5 @@ export const CO2BarChart = ({ emissionData }) => {
     </div>
   )
 }
+
+export default CO2BarChart
