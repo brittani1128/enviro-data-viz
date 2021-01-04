@@ -1,6 +1,6 @@
 import React from "react"
-import CO2BarChart from "../components/co2-bar-chart"
-import GasEmissionsStackedChart from "../components/gas-emissions-stacked-chart"
+import CO2BarChart from "../components/charts/co2-bar-chart"
+import GasEmissionsStackedChart from "../components/charts/gas-emissions-stacked-chart"
 import ChartGrid from "../components/chart-grid"
 
 import useCo2Emissions from "../hooks/use-co2-emissions"
