@@ -2,7 +2,7 @@ import React from "react"
 import CO2BarChart from "./co2-bar-chart"
 import GasEmissionsStackedChart from "./gas-emissions-stacked-chart"
 import useCo2Emissions from "../../hooks/use-co2-emissions"
-import useGasEmissions from "../../hooks/gas-emissions"
+import useGasEmissions from "../../hooks/use-gas-emissions"
 
 const Chart = ({ path }) => {
   const co2emissions = useCo2Emissions()

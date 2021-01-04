@@ -4,7 +4,7 @@ import GasEmissionsStackedChart from "../components/charts/gas-emissions-stacked
 import ChartGrid from "../components/chart-grid"
 
 import useCo2Emissions from "../hooks/use-co2-emissions"
-import useGasEmissions from "../hooks/gas-emissions"
+import useGasEmissions from "../hooks/use-gas-emissions"
 import "./index.css"
 
 export default () => {
