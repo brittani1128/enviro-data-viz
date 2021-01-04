@@ -15,8 +15,11 @@ export default () => {
     <div className="app-header">
       <header>Visualizations</header>
       <ChartGrid>
-        <CO2BarChart emissionData={co2emissions} />
-        <GasEmissionsStackedChart emissionData={gasEmissions} />
+        <CO2BarChart emissionData={co2emissions} path="co2-emissions" />
+        <GasEmissionsStackedChart
+          emissionData={gasEmissions}
+          path="greenhouse-gas-emissions"
+        />
       </ChartGrid>
     </div>
   )

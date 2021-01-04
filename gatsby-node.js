@@ -31,7 +31,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     const path = frontmatter.slug
     actions.createPage({
       path,
-      component: require.resolve("./src/templates/chart.js"),
+      component: require.resolve("./src/templates/chart-template.js"),
       context: {
         slug: path,
         title: frontmatter.title,
