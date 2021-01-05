@@ -11,9 +11,9 @@ export default () => {
   return (
     <div className="app-header">
       <header>Climate Change Indicators</header>
-      <Grid container direction="row">
+      <Grid container justify="center">
         {charts.map(chart => (
-          <Grid item key={chart.slug}>
+          <Grid key={chart.slug} item xs={12} sm={6} lg={4}>
             <ChartPreview chart={chart} />
           </Grid>
         ))}
