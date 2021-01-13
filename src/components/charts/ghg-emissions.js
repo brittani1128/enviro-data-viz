@@ -8,15 +8,17 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
   const h = 600
   const margin = { top: 20, right: 20, bottom: 100, left: 100 }
   const padding = 50
-  const graphWidth = w - margin.left - margin.right - 100
+  const graphWidth = w - margin.left - margin.right - 150
   const graphHeight = h - margin.top - margin.bottom
   const styles = {
     container: {
       display: "grid",
       justifyItems: "center",
+      fontFamily: "sans-serif",
     },
     header: {
       textAlign: "center",
+      color: "white",
     },
   }
 
@@ -43,23 +45,24 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("height", 100)
         .attr("transform", `translate(150, 100)`)
 
-      const keys = [
-        "Agriculture",
+      const [energy, agriculture, landUse, industrial, waste] = [
         "Energy",
-        "Industrial_Processes",
+        "Agriculture",
         "Land_Use_Change_and_Forestry",
+        "Industrial_Processes",
         "Waste",
       ]
+      const keys = [energy, agriculture, landUse, industrial, waste]
 
       const stack = d3.stack().keys(keys)
       const stackedValues = stack(data)
 
       // SCALES ----------------------
 
-      const yScale = d3.scaleLinear().domain([0, 60]).range([graphHeight, 0])
-      const xScale = d3.scaleTime().domain([1990, 2018]).range([50, 700])
+      const yScale = d3.scaleLinear().domain([0, 60000]).range([graphHeight, 0])
+      const xScale = d3.scaleTime().domain([1990, 2016]).range([50, 600])
 
-      const colors = ["#23999d", "#00bfc6", "#8bd7da", "#c2e8eb"]
+      const colors = ["#23999d", "#00bfc6", "#8bd7da", "#c2e8eb", "#23999d"]
       const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
 
       const makeYLines = () => d3.axisLeft().scale(yScale)
@@ -79,7 +82,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .append("g")
         .attr("transform", `translate(0, ${graphHeight})`)
 
-      const xAxis = d3.axisBottom(xScale).ticks(14).tickFormat(d3.format("d"))
+      const xAxis = d3.axisBottom(xScale).ticks(15).tickFormat(d3.format("d"))
       const yAxis = d3.axisLeft(yScale).ticks(5)
 
       gXAxis.call(xAxis)
@@ -93,26 +96,24 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       // BARS ------------------------
 
-      console.log({ stackedValues })
-      const bars = graph
-        .select("g")
-        .selectAll("g.series")
+      graph
+        .append("g")
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
         .data(stackedValues)
-        .join("g")
-        .attr("class", "series")
-        .style("fill", d => {
-          console.log({ d })
-          return colorScale(d.key)
-        })
-
-      bars
+        .enter()
+        .append("g")
+        .attr("fill", d => colorScale(d.key))
         .selectAll("rect")
+        .attr("transform", "translate(20,0)")
+        // enter a second time = loop subgroup per subgroup to add all rectangles
         .data(d => d)
-        .join("rect")
-        .attr("width", 30)
+        .enter()
+        .append("rect")
+        .attr("x", d => xScale(d.data.Year) - 15)
         .attr("y", d => yScale(d[1]))
-        .attr("x", d => xScale(d.year) - 35)
         .attr("height", d => yScale(d[0]) - yScale(d[1]))
+        .attr("width", 30)
         .on("mouseover", () => tooltip.style("display", null))
         .on("mouseout", () => tooltip.style("display", "none"))
         .on("mousemove", (event, d) => {
@@ -122,44 +123,46 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
             "transform",
             "translate(" + xPosition + "," + yPosition + ")"
           )
-          tooltip.select("text").text(Math.floor(d[1] - d[0]))
+          tooltip.select("text").text(`${Math.floor(d[1] - d[0])} Gt`)
         })
 
       // LEGEND ---------------------------
 
-      // const legendOption = legend
-      //   .selectAll(".legend-option")
-      //   .data(colors)
-      //   .enter()
-      //   .append("g")
-      //   .attr("class", "legend-option")
-      //   .attr("transform", (d, i) => "translate(30," + i * 19 + ")")
+      const legendOption = legend
+        .selectAll(".legend-option")
+        .data(colors)
+        .enter()
+        .append("g")
+        .attr("class", "legend-option")
+        .attr("transform", (d, i) => "translate(15," + i * 19 + ")")
 
-      // legendOption
-      //   .append("rect")
-      //   .attr("x", graphWidth - 18)
-      //   .attr("width", 18)
-      //   .attr("height", 18)
-      //   .style("fill", (d, i) => colors.slice().reverse()[i])
+      legendOption
+        .append("rect")
+        .attr("x", graphWidth - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", (d, i) => colors.slice().reverse()[i])
 
-      // legendOption
-      //   .append("text")
-      //   .attr("x", graphWidth + 5)
-      //   .attr("y", 9)
-      //   .attr("dy", ".35em")
-      //   .style("text-anchor", "start")
-      //   .text((d, i) => {
-      //     switch (i) {
-      //       case 0:
-      //         return other.replaceAll("_", " ")
-      //       case 1:
-      //         return nitrousOxide.replace("_", " ")
-      //       case 2:
-      //         return methane.replace("_", " ")
-      //       case 3:
-      //         return carbonDioxide.replace("_", " ")
-      //     }
-      //   })
+      legendOption
+        .append("text")
+        .attr("x", graphWidth + 5)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "start")
+        .text((d, i) => {
+          switch (i) {
+            case 0:
+              return waste
+            case 1:
+              return industrial.replaceAll("_", " ")
+            case 2:
+              return landUse.replaceAll("_", " ")
+            case 3:
+              return agriculture
+            case 4:
+              return energy
+          }
+        })
 
       // AXIS LABELS ------------------------
       svg
@@ -207,7 +210,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
   return (
     <div ref={d3Container} style={styles.container} className="container">
       <h1 style={styles.header} className="chart-title">
-        Global Greenhouse Gas Emissions by Gas
+        Global Greenhouse Gas Emissions by Sector
       </h1>
     </div>
   )
