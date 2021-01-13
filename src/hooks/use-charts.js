@@ -5,6 +5,7 @@ const useCharts = () => {
     query {
       allMdx {
         nodes {
+          excerpt
           frontmatter {
             title
             slug
@@ -16,7 +17,6 @@ const useCharts = () => {
               }
             }
           }
-          excerpt
         }
       }
     }
