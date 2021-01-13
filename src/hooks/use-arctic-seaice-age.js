@@ -15,7 +15,17 @@ export const useArcticSeaIceAge = () => {
       }
     }
   `)
-  return data.allArcticSeaiceAgeCsv.nodes
+  const newData = data.allArcticSeaiceAgeCsv.nodes.map(node => {
+    return {
+      year: node.Year,
+      Y1: Math.floor(node._1YI),
+      Y2: Math.floor(node._2YI),
+      Y3: Math.floor(node._3YI),
+      Y4: Math.floor(node._4YI),
+      Y5: Math.floor(node._5_YI),
+    }
+  })
+  return newData
 }
 
 export default useArcticSeaIceAge

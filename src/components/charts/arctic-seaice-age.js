@@ -12,8 +12,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
   const graphWidth = w - margin.left - margin.right - 100
   const graphHeight = h - margin.top - margin.bottom
 
-  const [Y1, Y2, Y3, Y4, Y5] = ["_1YI", "_2YI", "_3YI", "_4YI", "_5_YI"]
-  const keys = [Y1, Y2, Y3, Y4, Y5]
+  const keys = ["Y1", "Y2", "Y3", "Y4", "Y5"]
 
   const colors = ["#023E8A", "#0096C7", "#48CAE4", "#90E0EF", "#CAF0F8"]
   const styles = {
@@ -41,13 +40,13 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .attr("class", "graph-area")
         .attr("transform", `translate(${margin.left + padding}, ${margin.top})`)
 
-      const legend = svg
-        .append("g")
-        .attr("class", "legend")
-        .attr("fill", "white")
-        .attr("width", 150)
-        .attr("height", 100)
-        .attr("transform", `translate(150, 100)`)
+      // const legend = svg
+      //   .append("g")
+      //   .attr("class", "legend")
+      //   .attr("fill", "white")
+      //   .attr("width", 150)
+      //   .attr("height", 100)
+      //   .attr("transform", `translate(150, 100)`)
 
       const stack = d3.stack().keys(keys)
       const stackedValues = stack(data)
@@ -60,7 +59,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .range([graphHeight, 0])
       const xScale = d3
         .scaleLinear()
-        .domain([+data[0].Year, +data[data.length - 1].Year])
+        .domain([+data[0].year, +data[data.length - 1].year])
         .range([0, graphWidth])
 
       const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
@@ -98,7 +97,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         layer.forEach((d, i) => {
           currentStack.push({
             values: d,
-            year: data[i].Year,
+            year: data[i].year,
           })
         })
         stackedData.push(currentStack)
@@ -167,7 +166,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .attr("x", w / 2 + padding)
         .attr("y", h - margin.top)
         .style("text-anchor", "middle")
-        .text("Year")
+        .text("year")
 
       svg
         .append("text")
@@ -177,7 +176,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .attr("x", 0 - h / 2 + padding)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Emissions (million metric tons)")
+        .text("Sea Ice Extent (million square)")
 
       // TOOLTIP ------------------------
 
