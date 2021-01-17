@@ -22,7 +22,7 @@ const ChartTemplate = ({ data: { mdx: chart } }) => {
     <div style={{ maxWidth: "1000px", margin: "auto", marginTop: "20px" }}>
       <Back />
       <Chart path={frontmatter.slug} />
-      <div style={{ marginTop: "30px" }}>
+      <div style={{ marginTop: "50px" }}>
         <h3>Background</h3>
         <MDXRenderer>{body}</MDXRenderer>
       </div>

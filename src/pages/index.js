@@ -10,10 +10,12 @@ export default () => {
 
   return (
     <div className="app-header">
-      <header>Climate Change Indicators</header>
+      <header style={{ marginBottom: "50px", marginTop: "30px" }}>
+        Climate Change Indicators
+      </header>
       <Grid container justify="center">
         {charts.map(chart => (
-          <Grid key={chart.slug} item xs={12} sm={6} lg={4}>
+          <Grid key={chart.slug} item xs={12} md={6} lg={4}>
             <ChartPreview chart={chart} />
           </Grid>
         ))}

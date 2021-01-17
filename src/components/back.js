@@ -8,7 +8,7 @@ const Back = () => (
     style={{
       marginBottom: "20px",
       padding: "8px",
-      width: "60px",
+      width: "80px",
       borderRadius: "5px",
     }}
   >
