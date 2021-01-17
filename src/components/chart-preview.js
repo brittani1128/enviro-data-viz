@@ -8,9 +8,11 @@ const ChartPreview = ({ chart }) => {
   return (
     <article style={{ margin: "10px" }}>
       <Link to={chart.slug}>
-        <Card variant="outlined">
-          <Image fluid={chart.image.sharp.fluid} alt={chart.title} />
-        </Card>
+        <div style={{ borderRadius: "5px" }}>
+          <Card>
+            <Image fluid={chart.image.sharp.fluid} alt={chart.title} />
+          </Card>
+        </div>
       </Link>
     </article>
   )

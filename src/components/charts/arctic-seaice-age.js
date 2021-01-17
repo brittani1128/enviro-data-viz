@@ -204,9 +204,9 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
 
   return (
     <div ref={d3Container} style={styles.container} className="container">
-      <h1 style={styles.header} className="chart-title">
+      <h2 style={styles.header} className="chart-title">
         Arctic Sea Ice Age
-      </h1>
+      </h2>
     </div>
   )
 }

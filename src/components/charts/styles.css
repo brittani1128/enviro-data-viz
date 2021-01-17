@@ -2,7 +2,8 @@ div.container {
   width: 1000px;
   height: 700px;
   margin: auto;
-  background-color: #2f4a6d;
+  background-color: #1c3848;
+  border-radius: 5px;
 }
 
 .axis-label {

@@ -18,11 +18,13 @@ export const query = graphql`
 const ChartTemplate = ({ data: { mdx: chart } }) => {
   const { body, frontmatter } = chart
   return (
-    <>
-      <h1 style={{ color: "black" }}>{frontmatter.title}</h1>
+    <div style={{ maxWidth: "1000px", margin: "auto", marginTop: "30px" }}>
       <Chart path={frontmatter.slug} />
-      <MDXRenderer>{body}</MDXRenderer>
-    </>
+      <div style={{ marginTop: "30px" }}>
+        <h3>Background</h3>
+        <MDXRenderer>{body}</MDXRenderer>
+      </div>
+    </div>
   )
 }
 

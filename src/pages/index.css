@@ -1,5 +1,7 @@
-.body {
+body {
   font-family: "Open Sans", sans-serif;
+  background-color: #1b2c35;
+  color: white;
 }
 
 .app-header {

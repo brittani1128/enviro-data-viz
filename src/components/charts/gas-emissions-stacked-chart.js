@@ -211,9 +211,9 @@ const GasEmissionsStackedChart = ({ emissionData: data }) => {
 
   return (
     <div ref={d3Container} style={styles.container} className="container">
-      <h1 style={styles.header} className="chart-title">
+      <h2 style={styles.header} className="chart-title">
         Global Greenhouse Gas Emissions by Gas
-      </h1>
+      </h2>
     </div>
   )
 }

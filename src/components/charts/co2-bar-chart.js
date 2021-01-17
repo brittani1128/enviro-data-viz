@@ -119,10 +119,10 @@ const CO2BarChart = ({ emissionData }) => {
 
   return (
     <div style={styles.container} ref={d3Container} className="container">
-      <h1
+      <h2
         style={{ textAlign: "center" }}
         className="chart-title"
-      >{`CO2 Emissions for US`}</h1>
+      >{`US Historical CO2 Emissions`}</h2>
     </div>
   )
 }
