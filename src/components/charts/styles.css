@@ -2,7 +2,7 @@ div.container {
   width: 1000px;
   height: 700px;
   margin: auto;
-  background-color: #1c3848;
+  background-color: #0a4248;
   border-radius: 5px;
 }
 
@@ -16,7 +16,7 @@ div.container {
 
 .grid .tick line {
   stroke: #9faaae;
-  stroke-opacity: 0.3;
+  stroke-opacity: 0.2;
 }
 
 path {
@@ -35,3 +35,9 @@ text {
   font-size: 14px;
   fill: #fff;
 }
+
+/**
+Colors
+"#4BD7E7", "#A3EBB1", "#278AB0", "#1DC690", "#EAEAE0"
+1b2c35, 1c3848
+*/
