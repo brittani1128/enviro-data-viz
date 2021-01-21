@@ -8,7 +8,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
   const h = 600
   const margin = { top: 20, right: 20, bottom: 100, left: 100 }
   const padding = 50
-  const graphWidth = w - margin.left - margin.right - 150
+  const graphWidth = w - margin.left - margin.right
   const graphHeight = h - margin.top - margin.bottom
   const styles = {
     container: {
@@ -35,15 +35,14 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("width", graphWidth)
         .attr("height", graphHeight)
         .attr("class", "graph-area")
-        .attr("transform", `translate(${margin.left + padding}, ${margin.top})`)
+        .attr("transform", `translate(${margin.left + 20}, ${margin.top})`)
 
       const legend = svg
         .append("g")
         .attr("class", "legend")
-        .attr("fill", "white")
-        .attr("width", 150)
+        .attr("width", 100)
         .attr("height", 100)
-        .attr("transform", `translate(150, 100)`)
+        .attr("transform", `translate(-570, 45)`)
 
       const [energy, agriculture, landUse, industrial, waste] = [
         "Energy",
@@ -59,10 +58,10 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       // SCALES ----------------------
 
-      const yScale = d3.scaleLinear().domain([0, 60000]).range([graphHeight, 0])
-      const xScale = d3.scaleTime().domain([1990, 2016]).range([50, 600])
+      const yScale = d3.scaleLinear().domain([0, 60]).range([graphHeight, 0])
+      const xScale = d3.scaleTime().domain([1990, 2016]).range([50, 740])
 
-      const colors = ["#23999d", "#00bfc6", "#8bd7da", "#c2e8eb", "#23999d"]
+      const colors = ["#4BD7E7", "#A3EBB1", "#278AB0", "#1DC690", "#EAEAE0"]
       const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
 
       const makeYLines = () => d3.axisLeft().scale(yScale)
@@ -113,7 +112,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("x", d => xScale(d.data.Year) - 15)
         .attr("y", d => yScale(d[1]))
         .attr("height", d => yScale(d[0]) - yScale(d[1]))
-        .attr("width", 30)
+        .attr("width", 40)
         .on("mouseover", () => tooltip.style("display", null))
         .on("mouseout", () => tooltip.style("display", "none"))
         .on("mousemove", (event, d) => {
@@ -123,7 +122,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
             "transform",
             "translate(" + xPosition + "," + yPosition + ")"
           )
-          tooltip.select("text").text(`${Math.floor(d[1] - d[0])} Gt`)
+          tooltip.select("text").text(`${(d[1] - d[0]).toFixed(2)}Gt`)
         })
 
       // LEGEND ---------------------------
@@ -134,13 +133,13 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .enter()
         .append("g")
         .attr("class", "legend-option")
-        .attr("transform", (d, i) => "translate(15," + i * 19 + ")")
+        .attr("transform", (d, i) => "translate(-40," + i * 19 + ")")
 
       legendOption
         .append("rect")
         .attr("x", graphWidth - 18)
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("width", 30)
+        .attr("height", 10)
         .style("fill", (d, i) => colors.slice().reverse()[i])
 
       legendOption
@@ -149,6 +148,8 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "start")
+        .style("font-size", 12)
+        .attr("transform", (d, i) => "translate(15,-5)")
         .text((d, i) => {
           switch (i) {
             case 0:
@@ -168,7 +169,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       svg
         .append("text")
         .attr("class", "axis-label")
-        .attr("x", w / 2 + padding)
+        .attr("x", w / 2)
         .attr("y", h - margin.top)
         .style("text-anchor", "middle")
         .text("Year")
@@ -192,14 +193,14 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       tooltip
         .append("rect")
-        .attr("width", 55)
+        .attr("width", 70)
         .attr("height", 25)
         .attr("fill", "white")
-        .style("opacity", 0.3)
+        .style("opacity", 0.4)
 
       tooltip
         .append("text")
-        .attr("x", 28)
+        .attr("x", 35)
         .attr("dy", "1.2em")
         .style("text-anchor", "middle")
         .attr("font-size", "12px")
