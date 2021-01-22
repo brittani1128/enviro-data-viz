@@ -17,6 +17,8 @@ const GasEmissionsStackedChart = ({ emissionData: data }) => {
     },
     header: {
       textAlign: "center",
+      color: "white",
+      fontFamily: "Yanone Kaffeesatz, sans-serif",
     },
   }
 
@@ -25,8 +27,7 @@ const GasEmissionsStackedChart = ({ emissionData: data }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("width", w)
-        .attr("height", h)
+        .attr("viewBox", `0 0 ${w} ${h}`)
 
       const graph = svg
         .append("g")

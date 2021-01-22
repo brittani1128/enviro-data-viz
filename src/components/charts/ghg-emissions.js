@@ -14,11 +14,13 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
     container: {
       display: "grid",
       justifyItems: "center",
-      fontFamily: "sans-serif",
+      fontFamily: "Yanone Kaffeesatz, sans-serif",
+      fontSize: "18px",
     },
     header: {
       textAlign: "center",
       color: "white",
+      fontFamily: "Yanone Kaffeesatz, sans-serif",
     },
   }
 
@@ -27,13 +29,11 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("width", w)
-        .attr("height", h)
+        .attr("viewBox", `0 0 ${w} ${h}`)
 
       const graph = svg
         .append("g")
-        .attr("width", graphWidth)
-        .attr("height", graphHeight)
+        .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`)
         .attr("class", "graph-area")
         .attr("transform", `translate(${margin.left + 20}, ${margin.top})`)
 
@@ -182,7 +182,16 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("x", 0 - h / 2 + padding)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Emissions (million metric tons)")
+        .text("Emissions")
+      svg
+        .append("text")
+        .attr("class", "axis-sublabel")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 50)
+        .attr("x", 0 - h / 2 + padding)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("(gigatonnes of equivalent carbon dioxide)")
 
       // TOOLTIP ------------------------
 

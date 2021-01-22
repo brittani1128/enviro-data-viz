@@ -4,7 +4,7 @@ import "./styles.css"
 
 const CO2BarChart = ({ emissionData }) => {
   const d3Container = useRef(null)
-  const w = 900
+  const w = 950
   const h = 600
   const margin = { top: 20, right: 20, bottom: 100, left: 100 }
   const padding = 50
@@ -17,8 +17,8 @@ const CO2BarChart = ({ emissionData }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("width", w)
-        .attr("height", h)
+        .attr("viewBox", `0 0 ${w} ${h}`)
+
       const graph = svg
         .append("g")
         .attr("width", graphWidth)
@@ -113,7 +113,11 @@ const CO2BarChart = ({ emissionData }) => {
     container: {
       display: "grid",
       justifyItems: "center",
-      margin: "20px",
+    },
+    header: {
+      textAlign: "center",
+      color: "white",
+      fontFamily: "Yanone Kaffeesatz, sans-serif",
     },
   }
 
