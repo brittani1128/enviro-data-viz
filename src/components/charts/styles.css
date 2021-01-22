@@ -1,13 +1,17 @@
 div.container {
-  width: 1000px;
-  height: 700px;
+  max-width: 1000px;
+  max-height: 700px;
   margin: auto;
   background-color: #0a4248;
   border-radius: 5px;
 }
 
 .axis-label {
-  font-size: 24px;
+  font-size: 22px;
+}
+
+.axis-sublabel {
+  font-size: 18px;
 }
 
 .grid path {
