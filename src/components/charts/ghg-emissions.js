@@ -1,15 +1,20 @@
-import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
+import React, { useEffect, useRef } from "react"
+
+import { constants } from "./constants"
 import "./styles.css"
 
 const GhgEmissionsStackedChart = ({ emissionData: data }) => {
   const d3Container = useRef(null)
-  const w = 950
-  const h = 600
-  const margin = { top: 20, right: 20, bottom: 100, left: 100 }
-  const padding = 50
-  const graphWidth = w - margin.left - margin.right
-  const graphHeight = h - margin.top - margin.bottom
+  const {
+    SVG_WIDTH,
+    SVG_HEIGHT,
+    MARGIN,
+    PADDING,
+    GRAPH_WIDTH,
+    GRAPH_HEIGHT,
+  } = constants
+
   const styles = {
     container: {
       display: "grid",
@@ -29,13 +34,13 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("viewBox", `0 0 ${w} ${h}`)
+        .attr("viewBox", `0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`)
 
       const graph = svg
         .append("g")
-        .attr("viewBox", `0 0 ${graphWidth} ${graphHeight}`)
+        .attr("viewBox", `0 0 ${GRAPH_WIDTH} ${GRAPH_HEIGHT}`)
         .attr("class", "graph-area")
-        .attr("transform", `translate(${margin.left + 20}, ${margin.top})`)
+        .attr("transform", `translate(${MARGIN.left + 20}, ${MARGIN.top})`)
 
       const legend = svg
         .append("g")
@@ -58,7 +63,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       // SCALES ----------------------
 
-      const yScale = d3.scaleLinear().domain([0, 60]).range([graphHeight, 0])
+      const yScale = d3.scaleLinear().domain([0, 60]).range([GRAPH_HEIGHT, 0])
       const xScale = d3.scaleTime().domain([1990, 2016]).range([50, 740])
 
       const colors = ["#4BD7E7", "#A3EBB1", "#278AB0", "#1DC690", "#EAEAE0"]
@@ -70,7 +75,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("class", "grid")
         .call(
           makeYLines()
-            .tickSize(-(graphWidth - 40), 0, 0)
+            .tickSize(-(GRAPH_WIDTH - 40), 0, 0)
             .tickFormat("")
         )
 
@@ -79,7 +84,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       const gYAxis = graph.append("g")
       const gXAxis = graph
         .append("g")
-        .attr("transform", `translate(0, ${graphHeight})`)
+        .attr("transform", `translate(0, ${GRAPH_HEIGHT})`)
 
       const xAxis = d3.axisBottom(xScale).ticks(15).tickFormat(d3.format("d"))
       const yAxis = d3.axisLeft(yScale).ticks(5)
@@ -137,14 +142,14 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       legendOption
         .append("rect")
-        .attr("x", graphWidth - 18)
+        .attr("x", GRAPH_WIDTH - 18)
         .attr("width", 30)
         .attr("height", 10)
         .style("fill", (d, i) => colors.slice().reverse()[i])
 
       legendOption
         .append("text")
-        .attr("x", graphWidth + 5)
+        .attr("x", GRAPH_WIDTH + 5)
         .attr("y", 9)
         .attr("dy", ".35em")
         .style("text-anchor", "start")
@@ -169,8 +174,8 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       svg
         .append("text")
         .attr("class", "axis-label")
-        .attr("x", w / 2)
-        .attr("y", h - margin.top)
+        .attr("x", SVG_WIDTH / 2)
+        .attr("y", SVG_HEIGHT - MARGIN.top)
         .style("text-anchor", "middle")
         .text("Year")
 
@@ -178,8 +183,8 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .append("text")
         .attr("class", "axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", margin.right)
-        .attr("x", 0 - h / 2 + padding)
+        .attr("y", MARGIN.right)
+        .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("Emissions")
@@ -188,7 +193,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("class", "axis-sublabel")
         .attr("transform", "rotate(-90)")
         .attr("y", 50)
-        .attr("x", 0 - h / 2 + padding)
+        .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("(gigatonnes of equivalent carbon dioxide)")

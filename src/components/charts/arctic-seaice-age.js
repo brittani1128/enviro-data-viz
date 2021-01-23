@@ -1,17 +1,20 @@
-import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
+import React, { useEffect, useRef } from "react"
+
+import { constants } from "./constants"
 import "./styles.css"
 
 const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
   const d3Container = useRef(null)
-
-  const w = 950
-  const h = 600
-  const margin = { top: 20, right: 20, bottom: 100, left: 100 }
-  const padding = 50
-  const graphWidth = w - margin.left - margin.right - 100
-  const graphHeight = h - margin.top - margin.bottom
-
+  const {
+    SVG_WIDTH,
+    SVG_HEIGHT,
+    MARGIN,
+    PADDING,
+    GRAPH_WIDTH,
+    GRAPH_HEIGHT,
+  } = constants
+  const GRAPH_WIDTH_SMALL = GRAPH_WIDTH - 100
   const keys = ["Y1", "Y2", "Y3", "Y4", "Y5"]
 
   const colors = ["#023E8A", "#0096C7", "#48CAE4", "#90E0EF", "#CAF0F8"]
@@ -32,14 +35,14 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("viewBox", `0 0 ${w} ${h}`)
+        .attr("viewBox", `0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`)
 
       const graph = svg
         .append("g")
-        .attr("width", graphWidth)
-        .attr("height", graphHeight)
+        .attr("width", GRAPH_WIDTH_SMALL)
+        .attr("height", GRAPH_HEIGHT)
         .attr("class", "graph-area")
-        .attr("transform", `translate(${margin.left + padding}, ${margin.top})`)
+        .attr("transform", `translate(${MARGIN.left + PADDING}, ${MARGIN.top})`)
 
       // const legend = svg
       //   .append("g")
@@ -57,11 +60,11 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
       const yScale = d3
         .scaleLinear()
         .domain([0, 3000000])
-        .range([graphHeight, 0])
+        .range([GRAPH_HEIGHT, 0])
       const xScale = d3
         .scaleLinear()
         .domain([+data[0].year, +data[data.length - 1].year])
-        .range([0, graphWidth])
+        .range([0, GRAPH_WIDTH_SMALL])
 
       const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
 
@@ -69,14 +72,19 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
       graph
         .append("g")
         .attr("class", "grid")
-        .call(makeYLines().ticks(6).tickSize(-graphWidth, 0, 0).tickFormat(""))
+        .call(
+          makeYLines()
+            .ticks(6)
+            .tickSize(-GRAPH_WIDTH_SMALL, 0, 0)
+            .tickFormat("")
+        )
 
       // AXES ------------------------
 
       const gYAxis = graph.append("g")
       const gXAxis = graph
         .append("g")
-        .attr("transform", `translate(0, ${graphHeight})`)
+        .attr("transform", `translate(0, ${GRAPH_HEIGHT})`)
 
       const xAxis = d3.axisBottom(xScale).ticks(7).tickFormat(d3.format("d"))
       const yAxis = d3.axisLeft(yScale).ticks(6)
@@ -136,14 +144,14 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
 
       // legendOption
       //   .append("rect")
-      //   .attr("x", graphWidth - 18)
+      //   .attr("x", GRAPH_WIDTH - 18)
       //   .attr("width", 18)
       //   .attr("height", 18)
       //   .style("fill", (d, i) => colors.slice().reverse()[i])
 
       // legendOption
       //   .append("text")
-      //   .attr("x", graphWidth + 5)
+      //   .attr("x", GRAPH_WIDTH + 5)
       //   .attr("y", 9)
       //   .attr("dy", ".35em")
       //   .style("text-anchor", "start")
@@ -164,8 +172,8 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
       svg
         .append("text")
         .attr("class", "axis-label")
-        .attr("x", w / 2 + padding)
-        .attr("y", h - margin.top)
+        .attr("x", SVG_WIDTH / 2 + PADDING)
+        .attr("y", SVG_HEIGHT - MARGIN.top)
         .style("text-anchor", "middle")
         .text("year")
 
@@ -173,8 +181,8 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .append("text")
         .attr("class", "axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", margin.right)
-        .attr("x", 0 - h / 2 + padding)
+        .attr("y", MARGIN.right)
+        .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("Sea Ice Extent (million square)")

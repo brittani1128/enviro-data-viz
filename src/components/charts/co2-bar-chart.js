@@ -1,15 +1,20 @@
-import React, { useRef, useEffect } from "react"
 import * as d3 from "d3"
+import React, { useRef, useEffect } from "react"
+
+import { constants } from "./constants"
 import "./styles.css"
 
 const CO2BarChart = ({ emissionData }) => {
   const d3Container = useRef(null)
-  const w = 950
-  const h = 600
-  const margin = { top: 20, right: 20, bottom: 100, left: 100 }
-  const padding = 50
-  const graphWidth = w - margin.left - margin.right
-  const graphHeight = h - margin.top - margin.bottom
+  const {
+    SVG_WIDTH,
+    SVG_HEIGHT,
+    MARGIN,
+    PADDING,
+    GRAPH_WIDTH,
+    GRAPH_HEIGHT,
+  } = constants
+
   const data = emissionData["United States"]
 
   useEffect(() => {
@@ -17,25 +22,25 @@ const CO2BarChart = ({ emissionData }) => {
       const svg = d3
         .select(d3Container.current)
         .append("svg")
-        .attr("viewBox", `0 0 ${w} ${h}`)
+        .attr("viewBox", `0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`)
 
       const graph = svg
         .append("g")
-        .attr("width", graphWidth)
-        .attr("height", graphHeight)
+        .attr("width", GRAPH_WIDTH)
+        .attr("height", GRAPH_HEIGHT)
         .attr("class", "graph-area")
-        .attr("transform", `translate(${margin.left + padding}, ${margin.top})`)
+        .attr("transform", `translate(${MARGIN.left + PADDING}, ${MARGIN.top})`)
 
       // SCALES ----------------------
 
       const yScale = d3
         .scaleLinear()
         .domain([0, 6000000]) // calculate domain
-        .range([graphHeight, 0])
+        .range([GRAPH_HEIGHT, 0])
       const xScale = d3
         .scaleBand()
         .domain(data.map(d => d.date))
-        .range([0, graphWidth - 50])
+        .range([0, GRAPH_WIDTH - 50])
         .paddingInner(0.2)
         .paddingOuter(0.2)
 
@@ -44,7 +49,11 @@ const CO2BarChart = ({ emissionData }) => {
       graph
         .append("g")
         .attr("class", "grid")
-        .call(makeYLines().tickSize(-w, 0, 0).tickFormat(""))
+        .call(
+          makeYLines()
+            .tickSize(-GRAPH_WIDTH - 100, 0, 0)
+            .tickFormat("")
+        )
 
       // BARS ------------------------
 
@@ -56,7 +65,7 @@ const CO2BarChart = ({ emissionData }) => {
         .attr("x", (d, i) => xScale(d.date))
         .attr("y", (d, i) => yScale(d.value))
         .attr("width", xScale.bandwidth())
-        .attr("height", d => graphHeight - yScale(d.value))
+        .attr("height", d => GRAPH_HEIGHT - yScale(d.value))
         .attr("fill", "navy")
         .on("mouseenter", function (actual, i) {
           d3.selectAll(".value").attr("opacity", 0)
@@ -75,7 +84,7 @@ const CO2BarChart = ({ emissionData }) => {
 
       const gXAxis = graph
         .append("g")
-        .attr("transform", `translate(0, ${graphHeight})`)
+        .attr("transform", `translate(0, ${GRAPH_HEIGHT})`)
       const gYAxis = graph.append("g")
 
       const xAxis = d3.axisBottom(xScale)
@@ -92,8 +101,8 @@ const CO2BarChart = ({ emissionData }) => {
       svg
         .append("text")
         .attr("class", "axis-label")
-        .attr("x", w / 2 + padding)
-        .attr("y", h - margin.top)
+        .attr("x", SVG_WIDTH / 2 + PADDING)
+        .attr("y", SVG_HEIGHT - MARGIN.top)
         .style("text-anchor", "middle")
         .text("Year")
 
@@ -101,8 +110,8 @@ const CO2BarChart = ({ emissionData }) => {
         .append("text")
         .attr("class", "axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", margin.right)
-        .attr("x", 0 - h / 2 + padding)
+        .attr("y", MARGIN.right)
+        .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text("CO2 Emissions (kt)")
