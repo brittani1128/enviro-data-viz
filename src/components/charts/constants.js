@@ -6,3 +6,16 @@ export const constants = {
   GRAPH_WIDTH: 830,
   GRAPH_HEIGHT: 480,
 }
+
+export const color = {
+  white: "#eee",
+}
+
+export const chartHeaderStyles = {
+  textAlign: "center",
+  fontFamily: "Yanone Kaffeesatz, sans-serif",
+  display: "inline-block",
+  width: "100%",
+  color: "white",
+  fontSize: "18px",
+}

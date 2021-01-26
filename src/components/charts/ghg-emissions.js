@@ -1,7 +1,7 @@
 import * as d3 from "d3"
 import React, { useEffect, useRef } from "react"
 
-import { constants } from "./constants"
+import { constants, color, chartHeaderStyles } from "./constants"
 import "./styles.css"
 
 const GhgEmissionsStackedChart = ({ emissionData: data }) => {
@@ -14,20 +14,6 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
     GRAPH_WIDTH,
     GRAPH_HEIGHT,
   } = constants
-
-  const styles = {
-    container: {
-      display: "grid",
-      justifyItems: "center",
-      fontFamily: "Yanone Kaffeesatz, sans-serif",
-      fontSize: "18px",
-    },
-    header: {
-      textAlign: "center",
-      color: "white",
-      fontFamily: "Yanone Kaffeesatz, sans-serif",
-    },
-  }
 
   useEffect(() => {
     if (d3Container.current) {
@@ -177,6 +163,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("x", SVG_WIDTH / 2)
         .attr("y", SVG_HEIGHT - MARGIN.top)
         .style("text-anchor", "middle")
+        .attr("fill", color.white)
         .text("Year")
 
       svg
@@ -187,6 +174,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
+        .attr("fill", color.white)
         .text("Emissions")
       svg
         .append("text")
@@ -196,6 +184,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
+        .attr("fill", color.white)
         .text("(gigatonnes of equivalent carbon dioxide)")
 
       // TOOLTIP ------------------------
@@ -209,7 +198,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .append("rect")
         .attr("width", 70)
         .attr("height", 25)
-        .attr("fill", "white")
+        .attr("fill", color.white)
         .style("opacity", 0.4)
 
       tooltip
@@ -223,8 +212,8 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
   })
 
   return (
-    <div ref={d3Container} style={styles.container} className="container">
-      <h2 style={styles.header} className="chart-title">
+    <div ref={d3Container} className="container">
+      <h2 style={chartHeaderStyles}>
         Global Greenhouse Gas Emissions by Sector
       </h2>
     </div>

@@ -1,7 +1,7 @@
 import * as d3 from "d3"
 import React, { useRef, useEffect } from "react"
 
-import { constants } from "./constants"
+import { constants, chartHeaderStyles } from "./constants"
 import "./styles.css"
 
 const CO2BarChart = ({ emissionData }) => {
@@ -118,22 +118,10 @@ const CO2BarChart = ({ emissionData }) => {
     }
   })
 
-  const styles = {
-    container: {
-      display: "grid",
-      justifyItems: "center",
-    },
-    header: {
-      textAlign: "center",
-      color: "white",
-      fontFamily: "Yanone Kaffeesatz, sans-serif",
-    },
-  }
-
   return (
-    <div style={styles.container} ref={d3Container} className="container">
+    <div ref={d3Container} className="container">
       <h2
-        style={{ textAlign: "center" }}
+        style={chartHeaderStyles}
         className="chart-title"
       >{`US Historical CO2 Emissions`}</h2>
     </div>

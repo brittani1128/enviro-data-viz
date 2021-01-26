@@ -1,7 +1,7 @@
 import * as d3 from "d3"
 import React, { useEffect, useRef } from "react"
 
-import { constants } from "./constants"
+import { constants, chartHeaderStyles, color } from "./constants"
 import "./styles.css"
 
 const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
@@ -18,17 +18,6 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
   const keys = ["Y1", "Y2", "Y3", "Y4", "Y5"]
 
   const colors = ["#023E8A", "#0096C7", "#48CAE4", "#90E0EF", "#CAF0F8"]
-  const styles = {
-    container: {
-      display: "grid",
-      justifyItems: "center",
-    },
-    header: {
-      textAlign: "center",
-      color: "white",
-      fontFamily: "Yanone Kaffeesatz, sans-serif",
-    },
-  }
 
   useEffect(() => {
     if (d3Container.current) {
@@ -172,10 +161,10 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
       svg
         .append("text")
         .attr("class", "axis-label")
-        .attr("x", SVG_WIDTH / 2 + PADDING)
+        .attr("x", SVG_WIDTH / 2)
         .attr("y", SVG_HEIGHT - MARGIN.top)
         .style("text-anchor", "middle")
-        .text("year")
+        .text("Year")
 
       svg
         .append("text")
@@ -198,7 +187,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .append("rect")
         .attr("width", 55)
         .attr("height", 25)
-        .attr("fill", "white")
+        .attr("fill", color.white)
         .style("opacity", 0.3)
 
       tooltip
@@ -212,8 +201,8 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
   })
 
   return (
-    <div ref={d3Container} style={styles.container} className="container">
-      <h2 style={styles.header} className="chart-title">
+    <div ref={d3Container} className="container">
+      <h2 style={chartHeaderStyles} className="chart-title">
         Arctic Sea Ice Age
       </h2>
     </div>

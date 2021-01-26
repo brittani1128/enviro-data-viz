@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import * as d3 from "d3"
 import "./styles.css"
+import { chartHeaderStyles } from "./constants"
 
 const GasEmissionsStackedChart = ({ emissionData: data }) => {
   const d3Container = useRef(null)
@@ -10,17 +11,6 @@ const GasEmissionsStackedChart = ({ emissionData: data }) => {
   const padding = 50
   const graphWidth = w - margin.left - margin.right - 200
   const graphHeight = h - margin.top - margin.bottom
-  const styles = {
-    container: {
-      display: "grid",
-      justifyItems: "center",
-    },
-    header: {
-      textAlign: "center",
-      color: "white",
-      fontFamily: "Yanone Kaffeesatz, sans-serif",
-    },
-  }
 
   useEffect(() => {
     if (d3Container.current) {
@@ -211,8 +201,8 @@ const GasEmissionsStackedChart = ({ emissionData: data }) => {
   })
 
   return (
-    <div ref={d3Container} style={styles.container} className="container">
-      <h2 style={styles.header} className="chart-title">
+    <div ref={d3Container} className="container">
+      <h2 style={chartHeaderStyles} className="chart-title">
         Global Greenhouse Gas Emissions by Gas
       </h2>
     </div>
