@@ -9,6 +9,11 @@ export const constants = {
 
 export const color = {
   white: "#eee",
+  purple: "#6e67ff",
+  seafoam: "#0ff9ff",
+  blue: "#3493ff",
+  green: "#71ffd4",
+  palegreen: "#abfffd",
 }
 
 export const chartHeaderStyles = {

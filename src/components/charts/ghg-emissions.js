@@ -52,7 +52,13 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
       const yScale = d3.scaleLinear().domain([0, 60]).range([GRAPH_HEIGHT, 0])
       const xScale = d3.scaleTime().domain([1990, 2016]).range([50, 740])
 
-      const colors = ["#4BD7E7", "#A3EBB1", "#278AB0", "#1DC690", "#EAEAE0"]
+      const colors = [
+        color.purple,
+        color.blue,
+        color.seafoam,
+        color.green,
+        color.palegreen,
+      ].reverse()
       const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
 
       const makeYLines = () => d3.axisLeft().scale(yScale)

@@ -15,9 +15,15 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
     GRAPH_HEIGHT,
   } = constants
   const GRAPH_WIDTH_SMALL = GRAPH_WIDTH - 100
-  const keys = ["Y1", "Y2", "Y3", "Y4", "Y5"]
+  const keys = ["Y1", "Y2", "Y3", "Y4", "Y5"].reverse()
 
-  const colors = ["#023E8A", "#0096C7", "#48CAE4", "#90E0EF", "#CAF0F8"]
+  const colors = [
+    color.purple,
+    color.blue,
+    color.seafoam,
+    color.green,
+    color.palegreen,
+  ]
 
   useEffect(() => {
     if (d3Container.current) {
@@ -55,7 +61,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .domain([+data[0].year, +data[data.length - 1].year])
         .range([0, GRAPH_WIDTH_SMALL])
 
-      const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
+      // const colorScale = d3.scaleOrdinal().domain(keys).range(colors)
 
       const makeYLines = () => d3.axisLeft().scale(yScale)
       graph
