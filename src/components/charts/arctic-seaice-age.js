@@ -39,14 +39,6 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .attr("class", "graph-area")
         .attr("transform", `translate(${MARGIN.left + PADDING}, ${MARGIN.top})`)
 
-      // const legend = svg
-      //   .append("g")
-      //   .attr("class", "legend")
-      //   .attr("fill", "white")
-      //   .attr("width", 150)
-      //   .attr("height", 100)
-      //   .attr("transform", `translate(150, 100)`)
-
       const stack = d3.stack().keys(keys)
       const stackedValues = stack(data)
 
@@ -127,42 +119,6 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .style("opacity", "80%")
         .style("stroke", "#03045E")
 
-      // LEGEND ---------------------------
-
-      // const legendOption = legend
-      //   .selectAll(".legend-option")
-      //   .data(colors)
-      //   .enter()
-      //   .append("g")
-      //   .attr("class", "legend-option")
-      //   .attr("transform", (d, i) => "translate(30," + i * 19 + ")")
-
-      // legendOption
-      //   .append("rect")
-      //   .attr("x", GRAPH_WIDTH - 18)
-      //   .attr("width", 18)
-      //   .attr("height", 18)
-      //   .style("fill", (d, i) => colors.slice().reverse()[i])
-
-      // legendOption
-      //   .append("text")
-      //   .attr("x", GRAPH_WIDTH + 5)
-      //   .attr("y", 9)
-      //   .attr("dy", ".35em")
-      //   .style("text-anchor", "start")
-      // .text((d, i) => {
-      //   switch (i) {
-      //     case 0:
-      //       return other.replaceAll("_", " ")
-      //     case 1:
-      //       return nitrousOxide.replace("_", " ")
-      //     case 2:
-      //       return methane.replace("_", " ")
-      //     case 3:
-      //       return carbonDioxide.replace("_", " ")
-      //   }
-      // })
-
       // AXIS LABELS ------------------------
       svg
         .append("text")
@@ -182,32 +138,76 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
         .style("text-anchor", "middle")
         .text("Sea Ice Extent (million square)")
 
-      // TOOLTIP ------------------------
+      // TOOLTIP LEGEND ------------------------
 
-      const tooltip = svg
-        .append("g")
-        .attr("class", "tooltip")
-        .style("display", "none")
+      const tooltip = d3.select("#tooltip")
+      const tooltipLine = graph.append("line")
+      let tipBox
 
-      tooltip
+      const removeTooltip = () => {
+        if (tooltip) tooltip.style("display", "none")
+        if (tooltipLine) tooltipLine.attr("stroke", "none").attr("opacity", 0)
+      }
+
+      const drawTooltip = e => {
+        const year = Math.round(xScale.invert(d3.pointer(e, tipBox.node())[0]))
+
+        tooltipLine
+          .attr("stroke", "black")
+          .attr("opacity", 1)
+          .attr("class", "tooltipLine")
+          .attr("x1", xScale(year))
+          .attr("x2", xScale(year))
+          .attr("y1", 0)
+          .attr("y2", SVG_HEIGHT - 120)
+
+        // tooltip
+        //   .html(year)
+        //   .style("display", "block")
+        //   // .style("left", e => console.log(e) d3.event.pageX + 20)
+        //   // .style("top", d3.event.pageY - 20)
+        //   .selectAll()
+        //   .data(stackedData)
+        //   .enter()
+        //   .append("div")
+        //   // .style("color", d => d.color)
+        //   .html(d => {
+        //     return d
+        //       .filter(data => data.year == year)
+        //       .map(({ values }) => {
+        //         console.log(values.data)
+        //         return `
+        //         <ul>
+        //           <li>
+        //             Y1 Ice: ${values.data.Y1}
+        //           </li>
+        //           <li>
+        //             Y2 Ice: ${values.data.Y2}
+        //           </li>
+        //         </ul>
+
+        //         `
+        //       })
+        //   })
+      }
+
+      tipBox = graph
         .append("rect")
-        .attr("width", 55)
-        .attr("height", 25)
-        .attr("fill", color.white)
-        .style("opacity", 0.3)
-
-      tooltip
-        .append("text")
-        .attr("x", 28)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold")
+        .attr("class", "tipBox")
+        .attr("width", GRAPH_WIDTH_SMALL)
+        .attr("height", GRAPH_HEIGHT)
+        .attr("opacity", 0)
+        .on("mousemove", e => drawTooltip(e))
+        .on("mouseout", removeTooltip)
     }
   })
 
   return (
     <div ref={d3Container} className="container">
+      <div
+        id="tooltip"
+        style={{ position: "absolute", backgroundColor: "lightgray" }}
+      ></div>
       <h2 style={chartHeaderStyles} className="chart-title">
         Arctic Sea Ice Age
       </h2>
