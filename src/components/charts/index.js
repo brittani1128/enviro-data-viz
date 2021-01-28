@@ -8,7 +8,7 @@ import useArcticSeaIceAge from "../../hooks/use-arctic-seaice-age"
 import useGhgEmissions from "../../hooks/use-ghg-emissions"
 import GhgEmissionsStackedChart from "./ghg-emissions"
 
-const Chart = ({ path }) => {
+const Chart = ({ path, isPreview }) => {
   const co2emissions = useCo2Emissions()
   const gasEmissions = useGasEmissions()
   const arcticSeaIceAge = useArcticSeaIceAge()
@@ -16,13 +16,28 @@ const Chart = ({ path }) => {
 
   switch (path) {
     case "co2-emissions":
-      return <CO2BarChart emissionData={co2emissions} />
+      return <CO2BarChart emissionData={co2emissions} isPreview={isPreview} />
     case "greenhouse-gas-emissions":
-      return <GasEmissionsStackedChart emissionData={gasEmissions} />
+      return (
+        <GasEmissionsStackedChart
+          emissionData={gasEmissions}
+          isPreview={isPreview}
+        />
+      )
     case "arctic-seaice-age":
-      return <ArcticSeaIceAgeChart seaIceData={arcticSeaIceAge} />
+      return (
+        <ArcticSeaIceAgeChart
+          seaIceData={arcticSeaIceAge}
+          isPreview={isPreview}
+        />
+      )
     case "ghg-emissions":
-      return <GhgEmissionsStackedChart emissionData={ghgEmissions} />
+      return (
+        <GhgEmissionsStackedChart
+          emissionData={ghgEmissions}
+          isPreview={isPreview}
+        />
+      )
     default:
       return <div>oops no chart</div>
   }

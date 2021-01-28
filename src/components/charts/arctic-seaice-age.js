@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react"
 import { constants, chartHeaderStyles, color } from "./constants"
 import "./styles.css"
 
-const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
+const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
   const d3Container = useRef(null)
   const {
     SVG_WIDTH,
@@ -140,65 +140,69 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data }) => {
 
       // TOOLTIP LEGEND ------------------------
 
-      const tooltip = d3.select("#tooltip")
-      const tooltipLine = graph.append("line")
-      let tipBox
+      if (!isPreview) {
+        const tooltip = d3.select("#tooltip")
+        const tooltipLine = graph.append("line")
+        let tipBox
 
-      const removeTooltip = () => {
-        if (tooltip) tooltip.style("display", "none")
-        if (tooltipLine) tooltipLine.attr("stroke", "none").attr("opacity", 0)
+        const removeTooltip = () => {
+          if (tooltip) tooltip.style("display", "none")
+          if (tooltipLine) tooltipLine.attr("stroke", "none").attr("opacity", 0)
+        }
+
+        const drawTooltip = e => {
+          const year = Math.round(
+            xScale.invert(d3.pointer(e, tipBox.node())[0])
+          )
+
+          tooltipLine
+            .attr("stroke", "black")
+            .attr("opacity", 1)
+            .attr("class", "tooltipLine")
+            .attr("x1", xScale(year))
+            .attr("x2", xScale(year))
+            .attr("y1", 0)
+            .attr("y2", SVG_HEIGHT - 120)
+
+          // tooltip
+          //   .html(year)
+          //   .style("display", "block")
+          //   // .style("left", e => console.log(e) d3.event.pageX + 20)
+          //   // .style("top", d3.event.pageY - 20)
+          //   .selectAll()
+          //   .data(stackedData)
+          //   .enter()
+          //   .append("div")
+          //   // .style("color", d => d.color)
+          //   .html(d => {
+          //     return d
+          //       .filter(data => data.year == year)
+          //       .map(({ values }) => {
+          //         console.log(values.data)
+          //         return `
+          //         <ul>
+          //           <li>
+          //             Y1 Ice: ${values.data.Y1}
+          //           </li>
+          //           <li>
+          //             Y2 Ice: ${values.data.Y2}
+          //           </li>
+          //         </ul>
+
+          //         `
+          //       })
+          //   })
+        }
+
+        tipBox = graph
+          .append("rect")
+          .attr("class", "tipBox")
+          .attr("width", GRAPH_WIDTH_SMALL)
+          .attr("height", GRAPH_HEIGHT)
+          .attr("opacity", 0)
+          .on("mousemove", e => drawTooltip(e))
+          .on("mouseout", removeTooltip)
       }
-
-      const drawTooltip = e => {
-        const year = Math.round(xScale.invert(d3.pointer(e, tipBox.node())[0]))
-
-        tooltipLine
-          .attr("stroke", "black")
-          .attr("opacity", 1)
-          .attr("class", "tooltipLine")
-          .attr("x1", xScale(year))
-          .attr("x2", xScale(year))
-          .attr("y1", 0)
-          .attr("y2", SVG_HEIGHT - 120)
-
-        // tooltip
-        //   .html(year)
-        //   .style("display", "block")
-        //   // .style("left", e => console.log(e) d3.event.pageX + 20)
-        //   // .style("top", d3.event.pageY - 20)
-        //   .selectAll()
-        //   .data(stackedData)
-        //   .enter()
-        //   .append("div")
-        //   // .style("color", d => d.color)
-        //   .html(d => {
-        //     return d
-        //       .filter(data => data.year == year)
-        //       .map(({ values }) => {
-        //         console.log(values.data)
-        //         return `
-        //         <ul>
-        //           <li>
-        //             Y1 Ice: ${values.data.Y1}
-        //           </li>
-        //           <li>
-        //             Y2 Ice: ${values.data.Y2}
-        //           </li>
-        //         </ul>
-
-        //         `
-        //       })
-        //   })
-      }
-
-      tipBox = graph
-        .append("rect")
-        .attr("class", "tipBox")
-        .attr("width", GRAPH_WIDTH_SMALL)
-        .attr("height", GRAPH_HEIGHT)
-        .attr("opacity", 0)
-        .on("mousemove", e => drawTooltip(e))
-        .on("mouseout", removeTooltip)
     }
   })
 

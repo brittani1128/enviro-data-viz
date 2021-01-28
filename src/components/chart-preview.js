@@ -12,7 +12,7 @@ const ChartPreview = ({ chart }) => {
       <Link to={chart.slug}>
         <div style={{ borderRadius: "5px" }}>
           <Card>
-            <Chart path={chart.slug} />
+            <Chart path={chart.slug} isPreview />
           </Card>
         </div>
       </Link>

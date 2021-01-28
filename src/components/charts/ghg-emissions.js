@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react"
 import { constants, color, chartHeaderStyles } from "./constants"
 import "./styles.css"
 
-const GhgEmissionsStackedChart = ({ emissionData: data }) => {
+const GhgEmissionsStackedChart = ({ emissionData: data, isPreview }) => {
   const d3Container = useRef(null)
   const {
     SVG_WIDTH,
@@ -90,38 +90,6 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         .style("font-size", 14)
       gYAxis.selectAll("text").style("font-size", 14)
 
-      // BARS ------------------------
-
-      graph
-        .append("g")
-        .selectAll("g")
-        // Enter in the stack data = loop key per key = group per group
-        .data(stackedValues)
-        .enter()
-        .append("g")
-        .attr("fill", d => colorScale(d.key))
-        .selectAll("rect")
-        .attr("transform", "translate(20,0)")
-        // enter a second time = loop subgroup per subgroup to add all rectangles
-        .data(d => d)
-        .enter()
-        .append("rect")
-        .attr("x", d => xScale(d.data.Year) - 15)
-        .attr("y", d => yScale(d[1]))
-        .attr("height", d => yScale(d[0]) - yScale(d[1]))
-        .attr("width", 40)
-        .on("mouseover", () => tooltip.style("display", null))
-        .on("mouseout", () => tooltip.style("display", "none"))
-        .on("mousemove", (event, d) => {
-          const xPosition = d3.pointer(event)[0] + 130
-          const yPosition = d3.pointer(event)[1] - 10
-          tooltip.attr(
-            "transform",
-            "translate(" + xPosition + "," + yPosition + ")"
-          )
-          tooltip.select("text").text(`${(d[1] - d[0]).toFixed(2)}Gt`)
-        })
-
       // LEGEND ---------------------------
 
       const legendOption = legend
@@ -163,6 +131,7 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
         })
 
       // AXIS LABELS ------------------------
+
       svg
         .append("text")
         .attr("class", "axis-label")
@@ -195,25 +164,61 @@ const GhgEmissionsStackedChart = ({ emissionData: data }) => {
 
       // TOOLTIP ------------------------
 
-      const tooltip = svg
+      let tooltip
+      if (!isPreview) {
+        tooltip = svg
+          .append("g")
+          .attr("class", "tooltip")
+          .style("display", "none")
+
+        tooltip
+          .append("rect")
+          .attr("width", 70)
+          .attr("height", 25)
+          .attr("fill", color.white)
+          .style("opacity", 0.4)
+
+        tooltip
+          .append("text")
+          .attr("x", 35)
+          .attr("dy", "1.2em")
+          .style("text-anchor", "middle")
+          .attr("font-size", "12px")
+          .attr("font-weight", "bold")
+      }
+      // BARS ------------------------
+
+      graph
         .append("g")
-        .attr("class", "tooltip")
-        .style("display", "none")
-
-      tooltip
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedValues)
+        .enter()
+        .append("g")
+        .attr("fill", d => colorScale(d.key))
+        .selectAll("rect")
+        .attr("transform", "translate(20,0)")
+        // enter a second time = loop subgroup per subgroup to add all rectangles
+        .data(d => d)
+        .enter()
         .append("rect")
-        .attr("width", 70)
-        .attr("height", 25)
-        .attr("fill", color.white)
-        .style("opacity", 0.4)
-
-      tooltip
-        .append("text")
-        .attr("x", 35)
-        .attr("dy", "1.2em")
-        .style("text-anchor", "middle")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold")
+        .attr("x", d => xScale(d.data.Year) - 15)
+        .attr("y", d => yScale(d[1]))
+        .attr("height", d => yScale(d[0]) - yScale(d[1]))
+        .attr("width", 40)
+        .on("mouseover", () => !isPreview && tooltip.style("display", null))
+        .on("mouseout", () => !isPreview && tooltip.style("display", "none"))
+        .on("mousemove", (event, d) => {
+          if (!isPreview) {
+            const xPosition = d3.pointer(event)[0] + 130
+            const yPosition = d3.pointer(event)[1] - 10
+            tooltip.attr(
+              "transform",
+              "translate(" + xPosition + "," + yPosition + ")"
+            )
+            tooltip.select("text").text(`${(d[1] - d[0]).toFixed(2)}Gt`)
+          }
+        })
     }
   })
 
