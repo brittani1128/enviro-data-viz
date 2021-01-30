@@ -136,7 +136,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
         .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Sea Ice Extent (million square)")
+        .text("Sea Ice Extent (square miles)")
 
       // TOOLTIP LEGEND ------------------------
 
@@ -155,6 +155,10 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
             xScale.invert(d3.pointer(e, tipBox.node())[0])
           )
 
+          const dataForYear = stackedData
+            .map(d => d.filter(d => d.year == year).map(d => d.values[1]))
+            .flat()
+
           tooltipLine
             .attr("stroke", "black")
             .attr("opacity", 1)
@@ -164,34 +168,57 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
             .attr("y1", 0)
             .attr("y2", SVG_HEIGHT - 120)
 
-          // tooltip
-          //   .html(year)
-          //   .style("display", "block")
-          //   // .style("left", e => console.log(e) d3.event.pageX + 20)
-          //   // .style("top", d3.event.pageY - 20)
-          //   .selectAll()
-          //   .data(stackedData)
-          //   .enter()
-          //   .append("div")
-          //   // .style("color", d => d.color)
-          //   .html(d => {
-          //     return d
-          //       .filter(data => data.year == year)
-          //       .map(({ values }) => {
-          //         console.log(values.data)
-          //         return `
-          //         <ul>
-          //           <li>
-          //             Y1 Ice: ${values.data.Y1}
-          //           </li>
-          //           <li>
-          //             Y2 Ice: ${values.data.Y2}
-          //           </li>
-          //         </ul>
+          // .style("color", d => d.color)
 
-          //         `
-          //       })
-          //   })
+          // .selectAll()
+          // .data(dataForYear)
+          // .enter()
+          // .append("div")
+          // .html(d => `${d}`)
+          const xPosition = year > 2000 ? xScale(year) + 35 : xScale(year) + 275
+          tooltip
+            .style("display", "block")
+            .style("left", `${xPosition}px`)
+            .style("top", e.y + "px").html(`
+              <div style=padding:10px>
+                <div style="display:flex; justify-content:space-between; padding-bottom:10px">
+                  <span>${year}</span>
+                  <span>sqmi</span>
+                </div>
+                ${toolTipText(dataForYear)}
+                <div style="display:flex; justify-content:space-between; margin-top:10px">
+                  <span>Total</span>
+                  <span style="margin-left: 10px">${"xxx"}</span>
+                </div>
+              </div>
+          `)
+        }
+
+        const toolTipText = data => {
+          return `
+              <div style="font-size:12px">
+                <div style="display:flex; justify-content:space-between">
+                  <div><rect></rect>First-year ice</div>
+                  <span>${data[0]}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between">
+                  <span>Second-year ice</span>
+                  <span style="margin-left: 10px">${data[1]}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between">
+                  <span>Second-year ice</span>
+                  <span style="margin-left: 10px">${data[2]}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between">
+                  <span>Second-year ice</span>
+                  <span style="margin-left: 10px">${data[3]}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between">
+                  <span>Second-year ice</span>
+                  <span style="margin-left: 10px">${data[4]}</span>
+                </div>
+              </div>
+          `
         }
 
         tipBox = graph
@@ -210,7 +237,15 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
     <div ref={d3Container} className="container">
       <div
         id="tooltip"
-        style={{ position: "absolute", backgroundColor: "lightgray" }}
+        style={{
+          position: "absolute",
+          backgroundColor: "white",
+          color: "black",
+          textAlign: "center",
+          borderRadius: "3px",
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        }}
       ></div>
       <h2 style={chartHeaderStyles} className="chart-title">
         Arctic Sea Ice Age
