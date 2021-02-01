@@ -141,7 +141,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
       // TOOLTIP LEGEND ------------------------
 
       if (!isPreview) {
-        const tooltip = d3.select("#tooltip")
+        const tooltip = d3.select("#seaice-tooltip")
         const tooltipLine = graph.append("line")
         let tipBox
 
@@ -175,15 +175,15 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
           // .enter()
           // .append("div")
           // .html(d => `${d}`)
-          const xPosition = year > 2000 ? xScale(year) + 35 : xScale(year) + 275
+          const xPosition = year > 2000 ? xScale(year) - 40 : xScale(year) + 190
           tooltip
             .style("display", "block")
             .style("left", `${xPosition}px`)
-            .style("top", e.y + "px").html(`
+            .style("top", `${e.offsetY + 60}px`).html(`
               <div style=padding:10px>
-                <div style="display:flex; justify-content:space-between; padding-bottom:10px">
+                <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
                   <span>${year}</span>
-                  <span>sqmi</span>
+                  <span>mi^2</span>
                 </div>
                 ${toolTipText(dataForYear)}
                 <div style="display:flex; justify-content:space-between; margin-top:10px">
@@ -235,18 +235,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
 
   return (
     <div ref={d3Container} className="container">
-      <div
-        id="tooltip"
-        style={{
-          position: "absolute",
-          backgroundColor: "white",
-          color: "black",
-          textAlign: "center",
-          borderRadius: "3px",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        }}
-      ></div>
+      <div id="seaice-tooltip"></div>
       <h2 style={chartHeaderStyles} className="chart-title">
         Arctic Sea Ice Age
       </h2>
