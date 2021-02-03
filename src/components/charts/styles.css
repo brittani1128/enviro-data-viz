@@ -44,6 +44,7 @@ text {
 div #seaice-tooltip {
   position: absolute;
   background-color: white;
+  opacity: 0.95;
   color: black;
   text-align: center;
   border-radius: 3px;

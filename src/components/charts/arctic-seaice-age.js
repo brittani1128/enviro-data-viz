@@ -136,7 +136,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
         .attr("x", 0 - SVG_HEIGHT / 2 + PADDING)
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Sea Ice Extent (square miles)")
+        .text("Sea Ice Coverage (square miles)")
 
       // TOOLTIP LEGEND ------------------------
 
@@ -188,17 +188,24 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
                 ${toolTipText(dataForYear)}
                 <div style="display:flex; justify-content:space-between; margin-top:10px">
                   <span>Total</span>
-                  <span style="margin-left: 10px">${"xxx"}</span>
+                  <span style="margin-left: 10px">${calculateTotal(
+                    dataForYear
+                  )}</span>
                 </div>
               </div>
           `)
+        }
+        const calculateTotal = data => {
+          let total = 0
+          data.forEach(d => (total += d))
+          return total
         }
 
         const toolTipText = data => {
           return `
               <div style="font-size:12px">
                 <div style="display:flex; justify-content:space-between">
-                  <div><rect></rect>First-year ice</div>
+                  <div>First-year ice</div>
                   <span>${data[0]}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between">
@@ -206,15 +213,15 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
                   <span style="margin-left: 10px">${data[1]}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between">
-                  <span>Second-year ice</span>
+                  <span>Third-year ice</span>
                   <span style="margin-left: 10px">${data[2]}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between">
-                  <span>Second-year ice</span>
+                  <span>Fourth-year ice</span>
                   <span style="margin-left: 10px">${data[3]}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between">
-                  <span>Second-year ice</span>
+                  <span>Five+ year ice</span>
                   <span style="margin-left: 10px">${data[4]}</span>
                 </div>
               </div>
@@ -237,7 +244,7 @@ const ArcticSeaIceAgeChart = ({ seaIceData: data, isPreview }) => {
     <div ref={d3Container} className="container">
       <div id="seaice-tooltip"></div>
       <h2 style={chartHeaderStyles} className="chart-title">
-        Arctic Sea Ice Age
+        Change in Arctic Sea Ice Area by Age
       </h2>
     </div>
   )
