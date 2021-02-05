@@ -164,28 +164,27 @@ const GhgEmissionsStackedChart = ({ emissionData: data, isPreview }) => {
 
       // TOOLTIP ------------------------
 
-      let tooltip
-      if (!isPreview) {
-        tooltip = svg
-          .append("g")
-          .attr("class", "tooltip")
-          .style("display", "none")
+      const tooltip = d3.select("#ghg-tooltip")
 
-        tooltip
-          .append("rect")
-          .attr("width", 70)
-          .attr("height", 25)
-          .attr("fill", color.white)
-          .style("opacity", 0.4)
-
-        tooltip
-          .append("text")
-          .attr("x", 35)
-          .attr("dy", "1.2em")
-          .style("text-anchor", "middle")
-          .attr("font-size", "12px")
-          .attr("font-weight", "bold")
+      const removeTooltip = () => {
+        if (tooltip) tooltip.style("display", "none")
       }
+
+      const drawTooltip = () => {
+        tooltip.style("display", null)
+      }
+
+      const moveTooltip = (event, data) => {
+        tooltip
+          .style("left", `${d3.pointer(event)[0] + 140}px`)
+          .style("top", `${d3.pointer(event)[1] + 20}px`)
+          .html(
+            `<div style="padding:10px">${(data[1] - data[0]).toFixed(
+              2
+            )}Gt</div>`
+          )
+      }
+
       // BARS ------------------------
 
       graph
@@ -206,24 +205,15 @@ const GhgEmissionsStackedChart = ({ emissionData: data, isPreview }) => {
         .attr("y", d => yScale(d[1]))
         .attr("height", d => yScale(d[0]) - yScale(d[1]))
         .attr("width", 40)
-        .on("mouseover", () => !isPreview && tooltip.style("display", null))
-        .on("mouseout", () => !isPreview && tooltip.style("display", "none"))
-        .on("mousemove", (event, d) => {
-          if (!isPreview) {
-            const xPosition = d3.pointer(event)[0] + 130
-            const yPosition = d3.pointer(event)[1] - 10
-            tooltip.attr(
-              "transform",
-              "translate(" + xPosition + "," + yPosition + ")"
-            )
-            tooltip.select("text").text(`${(d[1] - d[0]).toFixed(2)}Gt`)
-          }
-        })
+        .on("mouseover", () => !isPreview && drawTooltip())
+        .on("mouseout", () => !isPreview && removeTooltip())
+        .on("mousemove", (e, d) => !isPreview && moveTooltip(e, d))
     }
   })
 
   return (
     <div ref={d3Container} className="container">
+      <div id="ghg-tooltip"></div>
       <h2 style={chartHeaderStyles}>
         Global Greenhouse Gas Emissions by Sector
       </h2>

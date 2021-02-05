@@ -41,7 +41,8 @@ text {
   fill: #fff;
 }
 
-div #seaice-tooltip {
+#seaice-tooltip,
+#ghg-tooltip {
   position: absolute;
   background-color: white;
   opacity: 0.95;
