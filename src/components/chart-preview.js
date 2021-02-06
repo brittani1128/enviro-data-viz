@@ -6,18 +6,16 @@ import { Card } from "@material-ui/core"
 import Chart from "./charts/index.js"
 import "./charts/styles.css"
 
-const ChartPreview = ({ chart }) => {
-  return (
-    <article style={{ margin: "10px" }}>
-      <Link to={chart.slug}>
-        <div style={{ borderRadius: "5px" }}>
-          <Card>
-            <Chart path={chart.slug} isPreview />
-          </Card>
-        </div>
-      </Link>
-    </article>
-  )
-}
+const ChartPreview = ({ chart }) => (
+  <div style={{ margin: "10px" }}>
+    <Link to={chart.slug}>
+      <div style={{ borderRadius: "5px" }}>
+        <Card>
+          <Chart path={chart.slug} isPreview />
+        </Card>
+      </div>
+    </Link>
+  </div>
+)
 
 export default ChartPreview
