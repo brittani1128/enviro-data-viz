@@ -1,12 +1,14 @@
 import React from "react"
-import { BarStack } from "@visx/shape"
-import { Group } from "@visx/group"
-import { Grid } from "@visx/grid"
-import { AxisBottom } from "@visx/axis"
-import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
-import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip"
-import { LegendOrdinal } from "@visx/legend"
+
+import { AxisBottom, AxisLeft } from "@visx/axis"
 import { localPoint } from "@visx/event"
+import { Grid } from "@visx/grid"
+import { Group } from "@visx/group"
+import { LegendOrdinal } from "@visx/legend"
+import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
+import { BarStack } from "@visx/shape"
+import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip"
+
 import { color } from "./constants"
 import useGhgEmissions from "../../hooks/use-ghg-emissions"
 
@@ -21,7 +23,7 @@ const keys = [energy, agriculture, landUse, industrial, waste]
 
 const { purple, seafoam, blue, green, palegreen, white } = color
 const background = "#0a4248"
-const defaultMargin = { top: 40, right: 0, bottom: 0, left: 0 }
+const defaultMargin = { top: 50, right: 30, bottom: 10, left: 30 }
 const tooltipStyles = {
   ...defaultStyles,
   minWidth: 60,
@@ -29,8 +31,11 @@ const tooltipStyles = {
   color: "white",
 }
 
-const width = 950
-const height = 600
+const tickLabelProps = {
+  fill: white,
+  fontSize: 11,
+  textAnchor: "end",
+}
 
 const getDate = d => d.Year
 
@@ -40,7 +45,17 @@ export default function GhgEmissionsBarStack({
   isPreview,
   events = false,
   margin = defaultMargin,
+  width: outerWidth = 1000,
+  height: outerHeight = 600,
 }) {
+  // SETUP
+  const marginHorizontal = margin.left + margin.right
+  const marginVertical = margin.top + margin.bottom
+  const width = outerWidth - marginHorizontal
+  const height = outerHeight - marginVertical
+  const xMax = width - margin.left
+  const yMax = height - margin.top - 20
+
   // DATA
   const data = useGhgEmissions()
 
@@ -76,27 +91,24 @@ export default function GhgEmissionsBarStack({
   })
 
   if (width < 10) return null
-  // BOUNDS
-  const xMax = width
-  const yMax = height - margin.top - 100
 
   yearScale.rangeRound([0, xMax])
   emissionScale.range([yMax, 0])
 
   return width < 10 ? null : (
     <div style={{ position: "relative" }}>
-      <svg ref={containerRef} width={width} height={height}>
+      <svg ref={containerRef} width={outerWidth} height={outerHeight}>
         <rect
           x={0}
           y={0}
-          width={width}
-          height={height}
+          width={outerWidth}
+          height={outerHeight}
           fill={background}
           rx={14}
         />
         <Grid
-          top={margin.top}
-          left={margin.left}
+          top={marginVertical}
+          left={marginHorizontal}
           xScale={yearScale}
           yScale={emissionScale}
           width={xMax}
@@ -105,7 +117,7 @@ export default function GhgEmissionsBarStack({
           strokeOpacity={0.1}
           xOffset={yearScale.bandwidth() / 2}
         />
-        <Group top={margin.top}>
+        <Group top={marginVertical} left={marginHorizontal}>
           <BarStack
             data={data}
             keys={keys}
@@ -146,16 +158,35 @@ export default function GhgEmissionsBarStack({
           </BarStack>
         </Group>
         <AxisBottom
-          top={yMax + margin.top}
+          left={marginHorizontal}
+          top={yMax + marginVertical}
           scale={yearScale}
           stroke={white}
           tickStroke={white}
           tickLabelProps={() => ({
-            fill: white,
-            fontSize: 11,
-            textAnchor: "middle",
+            ...tickLabelProps,
+            transform: `translate (18, 5)`,
           })}
         />
+        <AxisLeft
+          left={marginHorizontal}
+          top={marginVertical}
+          scale={emissionScale}
+          stroke={white}
+          tickStroke={white}
+          tickLabelProps={() => ({
+            ...tickLabelProps,
+            transform: `translate (-5, 3)`,
+          })}
+        />
+        <text
+          x="-200"
+          y={marginHorizontal + 20}
+          transform="rotate(-90)"
+          fontSize={10}
+        >
+          Emissions (Gt)
+        </text>
       </svg>
       <div
         style={{
@@ -173,7 +204,6 @@ export default function GhgEmissionsBarStack({
           labelMargin="0 15px 0 0"
         />
       </div>
-
       {!isPreview && tooltipOpen && tooltipData && (
         <TooltipInPortal
           top={tooltipTop}
@@ -183,7 +213,9 @@ export default function GhgEmissionsBarStack({
           <div style={{ color: colorScale(tooltipData.key) }}>
             <strong>{tooltipData.key}</strong>
           </div>
-          <div>{tooltipData.bar.data[tooltipData.key]} Gt</div>
+          <div>
+            {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)} Gt
+          </div>
         </TooltipInPortal>
       )}
     </div>
