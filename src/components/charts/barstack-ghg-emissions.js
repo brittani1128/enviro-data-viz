@@ -202,6 +202,7 @@ export default function GhgEmissionsBarStack({
           scale={colorScale}
           direction="row"
           labelMargin="0 15px 0 0"
+          labelFormat={l => l.replaceAll("_", " ")}
         />
       </div>
       {!isPreview && tooltipOpen && tooltipData && (
@@ -211,7 +212,7 @@ export default function GhgEmissionsBarStack({
           style={tooltipStyles}
         >
           <div style={{ color: colorScale(tooltipData.key) }}>
-            <strong>{tooltipData.key}</strong>
+            <strong>{tooltipData.key.replaceAll("_", " ")}</strong>
           </div>
           <div>
             {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)} Gt
