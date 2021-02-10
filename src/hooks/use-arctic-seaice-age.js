@@ -18,11 +18,11 @@ export const useArcticSeaIceAge = () => {
   const newData = data.allArcticSeaiceAgeCsv.nodes.map(node => {
     return {
       year: node.Year,
-      Y1: Math.floor(node._1YI),
-      Y2: Math.floor(node._2YI),
-      Y3: Math.floor(node._3YI),
-      Y4: Math.floor(node._4YI),
-      Y5: Math.floor(node._5_YI),
+      Y1: (node._1YI / 1000000).toFixed(2),
+      Y2: (node._2YI / 1000000).toFixed(2),
+      Y3: (node._3YI / 1000000).toFixed(2),
+      Y4: (node._4YI / 1000000).toFixed(2),
+      Y5: (node._5_YI / 1000000).toFixed(2),
     }
   })
   return newData
