@@ -31,8 +31,8 @@ export default function ArcticSeaiceAreaStack({
     .filter(k => k !== "year")
     .reverse()
 
-  const getY0 = d => d[0] / 3
-  const getY1 = d => d[1] / 3
+  const getY0 = d => d[0]
+  const getY1 = d => d[1]
 
   // SCALES
   const xScale = scaleTime({
@@ -42,6 +42,7 @@ export default function ArcticSeaiceAreaStack({
 
   const yScale = scaleLinear({
     range: [yMax, 0],
+    domain: [0, 3],
   })
 
   const colorScale = scaleOrdinal({
