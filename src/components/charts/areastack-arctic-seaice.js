@@ -1,18 +1,26 @@
 import React from "react"
 import { AreaStack } from "@visx/shape"
-import { scaleTime, scaleLinear, scaleOrdinal } from "@visx/scale"
+import { AxisBottom, AxisRight } from "@visx/axis"
+import { scaleTime, scaleLinear, scaleOrdinal, scaleBand } from "@visx/scale"
 import useArcticSeaIceAge from "../../hooks/use-arctic-seaice-age"
 // import { GradientOrangeRed } from "@visx/gradient"
 import { color } from "./constants"
+import { extent } from "d3"
 
-const getDate = d => d.year
+const getDate = d => Number(d.year)
 const { purple, seafoam, blue, green, palegreen, white } = color
 const colors = [purple, seafoam, blue, green, palegreen]
+
+const tickLabelProps = {
+  fill: white,
+  fontSize: 11,
+  textAnchor: "end",
+}
 
 export default function ArcticSeaiceAreaStack({
   width: outerWidth = 1000,
   height: outerHeight = 600,
-  margin = { top: 0, right: 0, bottom: 0, left: 0 },
+  margin = { top: 50, right: 30, bottom: 10, left: 30 },
   events = false,
   isPreview,
 }) {
@@ -35,14 +43,16 @@ export default function ArcticSeaiceAreaStack({
   const getY1 = d => d[1]
 
   // SCALES
-  const xScale = scaleTime({
-    range: [0, xMax],
-    domain: [Math.min(...data.map(getDate)), Math.max(...data.map(getDate))],
+  const xScale = scaleBand({
+    range: [0, xMax - 20],
+    domain: data.map(getDate),
+    nice: true,
   })
 
   const yScale = scaleLinear({
-    range: [yMax, 0],
+    range: [yMax - 20, 0],
     domain: [0, 3],
+    nice: true,
   })
 
   const colorScale = scaleOrdinal({
@@ -51,19 +61,19 @@ export default function ArcticSeaiceAreaStack({
   })
 
   return width < 10 ? null : (
-    <svg width={width} height={height}>
+    <svg width={outerWidth} height={outerHeight}>
       {/* <GradientOrangeRed id="stacked-area-orangered" /> */}
       <rect
         x={0}
         y={0}
-        width={width}
-        height={height}
+        width={outerWidth}
+        height={outerHeight}
         fill={background}
         rx={14}
       />
       <AreaStack
-        top={margin.top}
-        left={margin.left}
+        top={marginVertical}
+        left={marginHorizontal}
         keys={keys}
         data={data}
         x={d => xScale(getDate(d.data)) ?? 0}
@@ -87,6 +97,40 @@ export default function ArcticSeaiceAreaStack({
           })
         }
       </AreaStack>
+      <AxisBottom
+        left={40}
+        top={yMax}
+        scale={xScale}
+        stroke={white}
+        tickStroke={white}
+        tickLabelProps={() => ({
+          ...tickLabelProps,
+          transform: `translate (15, 5)`,
+        })}
+        numTicks={7}
+        label="Year"
+      />
+      <AxisRight
+        left={xMax}
+        top={20}
+        height={yMax}
+        scale={yScale}
+        stroke={white}
+        tickStroke={white}
+        tickLabelProps={() => ({
+          ...tickLabelProps,
+          transform: `translate (30, 5)`,
+        })}
+        numTicks={5}
+      />
+      <text
+        x={550}
+        y={marginHorizontal}
+        transform="translate (30, 5)"
+        fontSize={20}
+      >
+        Sea Ice Extent (million square miles)
+      </text>
     </svg>
   )
 }

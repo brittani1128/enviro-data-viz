@@ -1,7 +1,7 @@
 import React from "react"
 import CO2BarChart from "./co2-bar-chart"
 import GasEmissionsStackedChart from "./gas-emissions-stacked-chart"
-import ArcticSeaIceAgeChart from "./arctic-seaice-age"
+// import ArcticSeaIceAgeChart from "./arctic-seaice-age"
 import useCo2Emissions from "../../hooks/use-co2-emissions"
 import useGasEmissions from "../../hooks/use-gas-emissions"
 import GhgEmissionsBarStack from "./barstack-ghg-emissions"
