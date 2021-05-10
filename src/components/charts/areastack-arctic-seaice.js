@@ -1,6 +1,6 @@
 import React from "react"
 import { AreaStack } from "@visx/shape"
-import { AxisBottom, AxisRight } from "@visx/axis"
+import { AxisBottom, AxisLeft } from "@visx/axis"
 import { scaleTime, scaleLinear, scaleOrdinal, scaleBand } from "@visx/scale"
 import useArcticSeaIceAge from "../../hooks/use-arctic-seaice-age"
 // import { GradientOrangeRed } from "@visx/gradient"
@@ -44,13 +44,13 @@ export default function ArcticSeaiceAreaStack({
 
   // SCALES
   const xScale = scaleBand({
-    range: [0, xMax - 20],
+    range: [marginHorizontal, xMax],
     domain: data.map(getDate),
     nice: true,
   })
 
   const yScale = scaleLinear({
-    range: [yMax - 20, 0],
+    range: [yMax, margin.top],
     domain: [0, 3],
     nice: true,
   })
@@ -72,8 +72,6 @@ export default function ArcticSeaiceAreaStack({
         rx={14}
       />
       <AreaStack
-        top={marginVertical}
-        left={marginHorizontal}
         keys={keys}
         data={data}
         x={d => xScale(getDate(d.data)) ?? 0}
@@ -90,6 +88,7 @@ export default function ArcticSeaiceAreaStack({
                 stroke={colors[stack.index]}
                 fill={colors[stack.index]}
                 onClick={() => {
+                  console.log("clicked", stack.key)
                   if (events) alert(`${stack.key}`)
                 }}
               />
@@ -98,33 +97,30 @@ export default function ArcticSeaiceAreaStack({
         }
       </AreaStack>
       <AxisBottom
-        left={40}
+        left={0}
         top={yMax}
         scale={xScale}
         stroke={white}
         tickStroke={white}
-        tickLabelProps={() => ({
-          ...tickLabelProps,
-          transform: `translate (15, 5)`,
-        })}
-        numTicks={7}
+        numTicks={6}
         label="Year"
+        labelOffset={15}
       />
-      <AxisRight
-        left={xMax}
-        top={20}
+      <AxisLeft
+        left={marginHorizontal}
+        top={0}
         height={yMax}
         scale={yScale}
         stroke={white}
         tickStroke={white}
         tickLabelProps={() => ({
           ...tickLabelProps,
-          transform: `translate (30, 5)`,
+          transform: `translate (-10, 5)`,
         })}
         numTicks={5}
       />
       <text
-        x={550}
+        x={50}
         y={marginHorizontal}
         transform="translate (30, 5)"
         fontSize={20}
