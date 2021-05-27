@@ -46,7 +46,7 @@ export default function ArcticSeaiceAreaStack({
   const getY1 = d => d[1]
 
   // SCALES
-  const xScale = scaleLinear({
+  const xScale = scaleBand({
     range: [marginHorizontal, xMax],
     domain: data.map(getDate),
     nice: true,
@@ -82,8 +82,8 @@ export default function ArcticSeaiceAreaStack({
   const handleTooltip = useCallback(
     event => {
       const { x, y } = localPoint(event) || { x: 0 }
-      const x0 = Math.round(xScale.invert(x))
-      console.log(x0)
+      // const x0 = Math.round(xScale.invert(x))
+      // console.log(x0)
       // const index = bisectDate(stock, x0, 1)
       // const d0 = stock[index - 1]
       // const d1 = stock[index]
@@ -117,7 +117,7 @@ export default function ArcticSeaiceAreaStack({
           width={outerWidth}
           height={outerHeight}
           fill={background}
-          rx={14}
+          rx={4}
         />
         <AreaStack
           keys={keys}

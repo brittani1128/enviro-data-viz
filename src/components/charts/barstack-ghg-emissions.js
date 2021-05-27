@@ -104,7 +104,7 @@ export default function GhgEmissionsBarStack({
           width={outerWidth}
           height={outerHeight}
           fill={background}
-          rx={14}
+          rx={4}
         />
         <Grid
           top={marginVertical}
