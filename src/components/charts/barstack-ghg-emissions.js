@@ -165,7 +165,9 @@ export default function GhgEmissionsBarStack({
           tickStroke={white}
           tickLabelProps={() => ({
             ...tickLabelProps,
-            transform: `translate (18, 5)`,
+            transform: `translate (15, 5)`,
+            fontSize: isPreview ? "11px" : "14px",
+            letterSpacing: isPreview ? "1px" : "2px",
           })}
         />
         <AxisLeft
@@ -180,10 +182,10 @@ export default function GhgEmissionsBarStack({
           })}
         />
         <text
-          x="-200"
-          y={marginHorizontal + 20}
-          transform="rotate(-90)"
-          fontSize={10}
+          x={isPreview ? "80" : "-200"}
+          y={isPreview ? 90 : marginHorizontal + 20}
+          transform={!isPreview ? "rotate(-90)" : ""}
+          fontSize={isPreview ? 10 : 14}
         >
           Emissions (Gt)
         </text>
@@ -195,13 +197,16 @@ export default function GhgEmissionsBarStack({
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          fontSize: "14px",
+          fontSize: isPreview ? "10px" : "14px",
+          color: "#fff",
+          lineHeight: "1rem",
         }}
       >
         <LegendOrdinal
           scale={colorScale}
           direction="row"
-          labelMargin="0 15px 0 0"
+          itemMargin={!isPreview ? "0 5px 0 5px" : "0 0 0 5px"}
+          labelMargin="0 15px 0 5px"
           labelFormat={l => l.replaceAll("_", " ")}
         />
       </div>
