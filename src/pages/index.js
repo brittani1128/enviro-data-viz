@@ -1,6 +1,5 @@
 import React from "react"
 import { Grid } from "@material-ui/core"
-import { withParentSize } from "@visx/responsive"
 
 import ChartPreview from "../components/chart-preview"
 import useCharts from "../hooks/use-charts"

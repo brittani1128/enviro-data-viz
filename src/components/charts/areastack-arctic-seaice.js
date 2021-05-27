@@ -156,7 +156,7 @@ export default function ArcticSeaiceAreaStack({
           onMouseMove={handleTooltip}
           onMouseLeave={() => console.log("hide tooltip")}
         />
-        {tooltipData && (
+        {tooltipData && !isPreview && (
           <g>
             <Line
               from={{ x: tooltipLeft, y: margin.top }}
@@ -209,7 +209,7 @@ export default function ArcticSeaiceAreaStack({
           Sea Ice Extent (million square miles)
         </text>
       </svg>
-      {tooltipData && (
+      {tooltipData && !isPreview && (
         <Tooltip
           top={height + margin.top - 14}
           left={tooltipLeft}
