@@ -7,6 +7,7 @@ import { Group } from "@visx/group"
 import { LegendOrdinal } from "@visx/legend"
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale"
 import { BarStack } from "@visx/shape"
+import { Text } from "@visx/text"
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip"
 
 import { color } from "./constants"
@@ -52,7 +53,7 @@ export default function GhgEmissionsBarStack({
   const marginHorizontal = margin.left + margin.right
   const marginVertical = margin.top + margin.bottom
   const width = outerWidth - marginHorizontal
-  const height = outerHeight - marginVertical
+  const height = outerHeight - 2 * marginVertical
   const xMax = width - margin.left
   const yMax = height - margin.top - 20
 
@@ -106,8 +107,19 @@ export default function GhgEmissionsBarStack({
           fill={background}
           rx={4}
         />
+        <Text
+          x={width / 2}
+          width={width}
+          y={20}
+          verticalAnchor="start"
+          textAnchor="middle"
+          fontSize={isPreview ? 16 : 20}
+        >
+          Global Greenhouse Gas Emissions by Sector
+        </Text>
+
         <Grid
-          top={marginVertical}
+          top={marginVertical + 50}
           left={marginHorizontal}
           xScale={yearScale}
           yScale={emissionScale}
@@ -117,7 +129,7 @@ export default function GhgEmissionsBarStack({
           strokeOpacity={0.1}
           xOffset={yearScale.bandwidth() / 2}
         />
-        <Group top={marginVertical} left={marginHorizontal}>
+        <Group top={marginVertical + 50} left={marginHorizontal}>
           <BarStack
             data={data}
             keys={keys}
@@ -159,7 +171,7 @@ export default function GhgEmissionsBarStack({
         </Group>
         <AxisBottom
           left={marginHorizontal}
-          top={yMax + marginVertical}
+          top={yMax + marginVertical + 50}
           scale={yearScale}
           stroke={white}
           tickStroke={white}
@@ -172,7 +184,7 @@ export default function GhgEmissionsBarStack({
         />
         <AxisLeft
           left={marginHorizontal}
-          top={marginVertical}
+          top={marginVertical + 50}
           scale={emissionScale}
           stroke={white}
           tickStroke={white}
@@ -182,8 +194,8 @@ export default function GhgEmissionsBarStack({
           })}
         />
         <text
-          x={isPreview ? "80" : "-200"}
-          y={isPreview ? 90 : marginHorizontal + 20}
+          x={isPreview ? "80" : "-250"}
+          y={isPreview ? 130 : marginHorizontal + 20}
           transform={!isPreview ? "rotate(-90)" : ""}
           fontSize={isPreview ? 10 : 14}
         >
@@ -193,20 +205,20 @@ export default function GhgEmissionsBarStack({
       <div
         style={{
           position: "absolute",
-          top: margin.top / 2 - 10,
+          top: margin.top / 2 + 35,
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          fontSize: isPreview ? "10px" : "14px",
+          fontSize: isPreview ? "9px" : "16px",
           color: "#fff",
-          lineHeight: "1rem",
+          lineHeight: "0.8rem",
         }}
       >
         <LegendOrdinal
           scale={colorScale}
           direction="row"
           itemMargin={!isPreview ? "0 5px 0 5px" : "0 0 0 5px"}
-          labelMargin="0 15px 0 5px"
+          labelMargin={!isPreview ? "0 15px 0 5px" : "0 0 0 5px"}
           labelFormat={l => l.replaceAll("_", " ")}
         />
       </div>

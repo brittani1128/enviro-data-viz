@@ -17,6 +17,7 @@
     "@visx/responsive": "^1.10.1",
     "@visx/scale": "^1.4.0",
     "@visx/shape": "^1.4.0",
+    "@visx/text": "^1.10.0",
     "@visx/tooltip": "^1.7.2",
     "d3": "^6.3.1",
     "gatsby": "^2.26.1",
